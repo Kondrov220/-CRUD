@@ -1,0 +1,16 @@
+var e;const t=async()=>{try{return await fetch("http://localhost:3000/students").then(e=>e.json())}catch(e){console.log(e)}},l=e=>e.map(e=>`
+        <tr id="${e.id}">
+         <td>${e.id}</td>
+          <td>${e.name}</td>
+          <td>${e.age}</td>
+          <td>${e.course}</td>
+          <td>${e.skills.join(", ")}</td>
+          <td>${e.email}</td>
+          <td>${e.isEnrolled}</td>
+          <td>
+            <button data-id="${e.id}" class="delete-btn">Delete</button>
+            <button data-id="${e.id}" class="edit-btn">Edit</button>
+          </td>
+        </tr>
+      `).join(""),n=async e=>{let t={method:"POST",body:JSON.stringify(e),headers:{"Content-Type":"application/json; charset=UTF-8"}};try{return await fetch("http://localhost:3000/students",t).then(e=>e.json())}catch(e){console.log(e)}},a=async e=>{try{return await fetch(`http://localhost:3000/students/${e}`,{method:"DELETE"})}catch(e){console.log(e)}},o=async(e,t)=>{let l={method:"PUT",body:JSON.stringify(t),headers:{"Content-Type":"application/json; charset=UTF-8"}};try{return await fetch(`http://localhost:3000/students/${e}`,l).then(e=>e.json())}catch(e){console.log(e)}};t().then(e=>{console.log(e),document.querySelector("tbody").innerHTML=l(e)}),(e=document.querySelector("#add-student-form")).addEventListener("submit",async a=>{a.preventDefault();let o=e.elements.name.value,s=parseInt(e.elements.age.value),r=e.elements.course.value,c=e.elements.skills.value.split(",").map(e=>e.trim()),d=e.elements.email.value,i=e.elements.isEnrolled.checked;await n({name:o,age:s,course:r,skills:c,email:d,isEnrolled:i});let u=await t();document.querySelector("tbody").innerHTML=l(u),e.reset()}),document.querySelector("tbody").addEventListener("click",async e=>{if("Delete"===e.target.textContent){let n=e.target.parentElement.parentElement;console.log(n),console.log(n.id),await a(n.id),await t().then(e=>{console.log(e),document.querySelector("tbody").innerHTML=l(e)})}}),document.querySelector("tbody").addEventListener("click",async e=>{if("Edit"===e.target.textContent){var n,a;console.log("test"),n=document.querySelector("#add-student-form"),console.log(a=e.target.parentElement.parentElement.id),console.log(n),n.addEventListener("submit",async e=>{console.log("1"),e.preventDefault(),e.target.elements.name.value=document.querySelector("#name").innerHTML,e.target.elements.age.value=document.querySelector("#age").innerHTML,e.target.elements.course.value=document.querySelector("#course").innerHTML,e.target.elements.skills.value=document.querySelector("#skills").src,e.target.elements.email.value=document.querySelector("#email").innerHTML,e.target.elements.isEnrolled.checked=document.querySelector("#isEnrolled").checked;let n=e.target.elements.name.value,s=parseInt(e.target.elements.age.value),r=e.target.elements.course.value,c=e.target.elements.skills.value,d=e.target.elements.email.value,i=e.target.elements.isEnrolled.checked,u={name:n,age:s,course:r,skills:c,email:d,isEnrolled:i};await o(u,a),await t().then(e=>{console.log(e),document.querySelector("tbody").innerHTML=l(e)}),n=e.target.elements.name.value="",r=e.target.elements.course.value="",c=e.target.elements.skills.value="",d=e.target.elements.email.value="",i=e.target.elements.isEnrolled.checked=!1,console.log(u)})}});
+//# sourceMappingURL=-CRUD.fbf9589f.js.map
