@@ -1,0 +1,27 @@
+{
+  "name": "-crud",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+       "start": "npx parcel src/index.html",
+    "build": "parcel build src/index.html --no-cache --public-url /-crud/",
+    "deploy": "gh-pages -d dist",
+    "predeploy": "npm run build",
+    "server": "npx json-server students.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kondrov220/-CRUD.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kondrov220/-CRUD/issues"
+  },
+  "homepage": "https://github.com/Kondrov220/-CRUD#readme",
+  "devDependencies": {
+    "gh-pages": "^6.3.0",
+    "parcel": "^2.15.4"
+  }
+}
