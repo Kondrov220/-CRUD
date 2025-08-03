@@ -694,6 +694,8 @@ document.querySelector("tbody").addEventListener("click", async (event)=>{
 document.querySelector("tbody").addEventListener("click", async (event)=>{
     if (event.target.textContent === "Edit") {
         console.log("test");
+        document.querySelector("#add-student-btn").classList.add("hidden");
+        document.querySelector("#update-student-btn").classList.remove("hidden");
         (0, _updateJs.collectModalInfoEdit)(document.querySelector("#add-student-form"), event.target.parentElement.parentElement.id);
     }
 }); //операція редагування
@@ -701,7 +703,7 @@ document.querySelector("tbody").addEventListener("click", async (event)=>{
  //   collectModalInfoEdit(document.querySelector(".edit-form"))
  // });
 
-},{"./api/get.js":"daUFG","./markUp/markUp.js":"hS0rU","./form/get.js":"lQH2V","./form/update.js":"jnY7P","./api/delate.js":"8DavH"}],"daUFG":[function(require,module,exports,__globalThis) {
+},{"./api/get.js":"daUFG","./markUp/markUp.js":"hS0rU","./form/get.js":"lQH2V","./api/delate.js":"8DavH","./form/update.js":"jnY7P"}],"daUFG":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getStudents", ()=>getStudents);
@@ -754,7 +756,7 @@ const makeList = (arr)=>{
           <td>${student.name}</td>
           <td>${student.age}</td>
           <td>${student.course}</td>
-          <td>${student.skills.join(", ")}</td>
+<td>${Array.isArray(student.skills) ? student.skills.join(", ") : student.skills}</td>
           <td>${student.email}</td>
           <td>${student.isEnrolled}</td>
           <td>
@@ -815,72 +817,6 @@ const post = async (iceCream)=>{
     }
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnY7P":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "collectModalInfoEdit", ()=>collectModalInfoEdit);
-var _updateJs = require("../api/update.js");
-var _getJs = require("../api/get.js");
-var _markUpJs = require("../markUp/markUp.js");
-const collectModalInfoEdit = (form, id)=>{
-    console.log(id);
-    console.log(form);
-    form.addEventListener("submit", async (e)=>{
-        console.log("1");
-        e.preventDefault();
-        e.target.elements.name.value = document.querySelector("#name").innerHTML;
-        e.target.elements.age.value = document.querySelector("#age").innerHTML;
-        e.target.elements.course.value = document.querySelector("#course").innerHTML;
-        e.target.elements.skills.value = document.querySelector("#skills").src;
-        e.target.elements.email.value = document.querySelector("#email").innerHTML;
-        e.target.elements.isEnrolled.checked = document.querySelector("#isEnrolled").checked;
-        const name = e.target.elements.name.value;
-        const age = parseInt(e.target.elements.age.value);
-        const course = e.target.elements.course.value;
-        const skills = e.target.elements.skills.value;
-        const email = e.target.elements.email.value;
-        const isEnrolled = e.target.elements.isEnrolled.checked;
-        const newStudent = {
-            name,
-            age,
-            course,
-            skills,
-            email,
-            isEnrolled
-        };
-        await (0, _updateJs.updateStudent)(newStudent, id);
-        await (0, _getJs.getStudents)().then((data)=>{
-            console.log(data);
-            document.querySelector("tbody").innerHTML = (0, _markUpJs.makeList)(data);
-        });
-        name = e.target.elements.name.value = "";
-        course = e.target.elements.course.value = "";
-        skills = e.target.elements.skills.value = "";
-        email = e.target.elements.email.value = "";
-        isEnrolled = e.target.elements.isEnrolled.checked = false;
-        console.log(newStudent);
-    });
-};
-
-},{"../api/update.js":"hl5J0","../api/get.js":"daUFG","../markUp/markUp.js":"hS0rU","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hl5J0":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "updateStudent", ()=>updateStudent);
-const updateStudent = async (id, student)=>{
-    const options = {
-        method: "PUT",
-        body: JSON.stringify(student),
-        headers: {
-            "Content-Type": "application/json; charset=UTF-8"
-        }
-    };
-    try {
-        return await fetch(`http://localhost:3000/students/${id}`, options).then((response)=>response.json());
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8DavH":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -890,6 +826,76 @@ const deleteStudent = async (id)=>{
         return await fetch(`http://localhost:3000/students/${id}`, {
             method: "DELETE"
         });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnY7P":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "collectModalInfoEdit", ()=>collectModalInfoEdit);
+var _updateJs = require("../api/update.js");
+var _getJs = require("../api/get.js");
+var _markUpJs = require("../markUp/markUp.js");
+const collectModalInfoEdit = (form, id)=>{
+    console.log("ID:", id); // має бути число або рядок
+    console.log("ID typeof:", typeof id);
+    const row = document.getElementById(id);
+    const cells = row.querySelectorAll("td");
+    form.querySelector("#name").value = cells[1].textContent;
+    form.querySelector("#age").value = cells[2].textContent;
+    form.querySelector("#course").value = cells[3].textContent;
+    form.querySelector("#skills").value = cells[4].textContent;
+    form.querySelector("#email").value = cells[5].textContent;
+    document.querySelector("#update-student-btn").addEventListener("click", async (e)=>{
+        e.preventDefault();
+        const name = form.querySelector("#name").value;
+        const age = form.querySelector("#age").value;
+        const course = form.querySelector("#course").value;
+        const skills = form.querySelector("#skills").value;
+        const email = form.querySelector("#email").value;
+        const isEnrolled = form.querySelector("#isEnrolled").checked;
+        const newStudent = {
+            name,
+            age,
+            course,
+            skills,
+            email,
+            isEnrolled
+        };
+        (0, _updateJs.updateStudent)(newStudent, id);
+        (0, _getJs.getStudents)().then((data)=>{
+            console.log(data);
+            document.querySelector("tbody").innerHTML = (0, _markUpJs.makeList)(data);
+        });
+        form.querySelector("#name").value = "";
+        form.querySelector("#age").value = "";
+        form.querySelector("#course").value = "";
+        form.querySelector("#skills").value = "";
+        form.querySelector("#email").value = "";
+        form.querySelector("#isEnrolled").checked = false;
+        console.log(newStudent);
+        document.querySelector("#update-student-btn").classList.add("hidden");
+        document.querySelector("#add-student-btn").classList.remove("hidden");
+    });
+};
+
+},{"../api/update.js":"hl5J0","../api/get.js":"daUFG","../markUp/markUp.js":"hS0rU","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hl5J0":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updateStudent", ()=>updateStudent);
+const updateStudent = async (student, id)=>{
+    console.log(id, typeof id);
+    const options = {
+        method: "PATCH",
+        body: JSON.stringify(student),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    };
+    try {
+        return await fetch(`http://localhost:3000/students/${id}`, options).then((response)=>response.json());
     } catch (error) {
         console.log(error);
     }
