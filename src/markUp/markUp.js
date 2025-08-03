@@ -7,7 +7,7 @@ export const makeList = (arr) => {
           <td>${student.name}</td>
           <td>${student.age}</td>
           <td>${student.course}</td>
-          <td>${student.skills.join(", ")}</td>
+<td>${Array.isArray(student.skills) ? student.skills.join(", ") : student.skills}</td>
           <td>${student.email}</td>
           <td>${student.isEnrolled}</td>
           <td>

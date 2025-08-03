@@ -1,6 +1,7 @@
-export const updateStudent = async (id, student) => {
+export const updateStudent = async ( student, id) => {
+  console.log(id, typeof id);
   const options = {
-    method: "PUT",
+    method: "PATCH",
     body: JSON.stringify(student),
     headers: {
       "Content-Type": "application/json; charset=UTF-8",

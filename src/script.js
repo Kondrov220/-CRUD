@@ -30,6 +30,8 @@ document.querySelector("tbody").addEventListener("click", async (event) => {
   document.querySelector("tbody").addEventListener("click", async (event) => {
   if (event.target.textContent === "Edit") {
       console.log("test")
+      document.querySelector("#add-student-btn").classList.add("hidden");
+      document.querySelector("#update-student-btn").classList.remove("hidden");
     collectModalInfoEdit(document.querySelector("#add-student-form"), event.target.parentElement.parentElement.id);
   }
 });
